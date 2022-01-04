@@ -1,5 +1,5 @@
 ---
-title: "NYPD Precinct 52 Shooting Incident Victim Data"
+title: "NYPD Shooting Incident Victim Data"
 author: Jacob Moore
 output:
   html_document: default
@@ -22,11 +22,9 @@ num_shootings_all <- nrow(shooting_data)
 
 ```{r clean_data, echo=FALSE}
 
-clean_data_columns <- subset(shooting_data, select = -c(INCIDENT_KEY, OCCUR_DATE, OCCUR_TIME, BORO, PERP_AGE_GROUP, PERP_SEX, PERP_RACE, JURISDICTION_CODE, LOCATION_DESC, STATISTICAL_MURDER_FLAG, X_COORD_CD, Y_COORD_CD, Latitude, Longitude, Lon_Lat))
+clean_data <- subset(shooting_data, select = -c(INCIDENT_KEY, OCCUR_DATE, OCCUR_TIME, BORO, PERP_AGE_GROUP, JURISDICTION_CODE, LOCATION_DESC, PRECINCT, STATISTICAL_MURDER_FLAG, X_COORD_CD, Y_COORD_CD, Latitude, Longitude, Lon_Lat))
 
-clean_data_rows <- subset(clean_data_columns, PRECINCT==52)
 
-clean_data <- subset(clean_data_rows, select=-c(PRECINCT))
 ```
 
 ### Data Summary
@@ -65,4 +63,4 @@ The victims of these shootings were `r percent_female`% female, and `r percent_m
 
 Racially, `r percent_black`% of victims in Precinct 52 were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
-Victims of shootings involving Precinct 52 were thus, overwhelmingly male and non-white.
+Victims of shootings were thus, overwhelmingly male and Black.
