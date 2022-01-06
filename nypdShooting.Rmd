@@ -1,5 +1,5 @@
 ---
-title: "When Shootings Go Up, It Is People of Color Who Bear The Brunt"
+title: "When Shootings Go Up, People of Color Bear the Brunt"
 author: Jacob Moore
 output:
   html_document: default
@@ -26,9 +26,7 @@ clean_data <- subset(shooting_data, select = -c(INCIDENT_KEY, OCCUR_DATE, OCCUR_
 ```
 
 ### **Introduction**
-The objective of this study is to demonstrate the relationship between the number of shooting incidents in New York City and the proportion of shooting victims in those incidents who are members of racial minorities. This study will first determine how racial breakdowns of New York Police Department shooting incident data compares between the five boroughs of New York City: the Bronx, Brooklyn, Manhattan, Queens, and Staten Island.
-
-Finally, this study will examine the data's implication that increases in the number of shooting incidents coincide with a decrease in the proportion of shooting victims who are identified as White and therefore a higher proportion of shooting victims who are members of minority communities. 
+The objective of this study is to demonstrate the relationship between the number of shooting incidents in New York City and the proportion of shooting victims involved in those incidents who are members of racial minorities. This study will first determine how racial breakdowns of New York Police Department shooting incident data compare between the five boroughs of New York City: the Bronx, Brooklyn, Manhattan, Queens, and Staten Island. Second, this study will examine the data's implication that increases in the number of shooting incidents coincide with a decrease in the proportion of shooting victims identified as White. Therefore, a higher proportion of shooting victims are people of color.
 
 ### **NYC Overall Data Summary**
 
@@ -54,7 +52,7 @@ percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 
 This data set provides a record of shooting incidents occurring in New York City between 2006 and 2020.
-There were `r num_shootings_all` shooting incidents recorded by the NYPD in this data set in the city overall.
+There were `r num_shootings_all` shooting incidents total recorded by the NYPD in this data set.
 
 `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
@@ -106,7 +104,7 @@ bronx_hisp <- percent_hispanic
 bronx_oth <- other_victims
 ```
 
-There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Bronx, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Bronx, which is `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r bronx_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in the Bronx", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in the Bronx")
@@ -156,7 +154,7 @@ brook_hisp <- percent_hispanic
 brook_oth <- other_victims
 ```
 
-There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Brooklyn, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Brooklyn, which is `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r brooklyn_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Brooklyn", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Brooklyn")
@@ -205,7 +203,7 @@ man_hisp <- percent_hispanic
 man_oth <- other_victims
 ```
 
-There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Manhattan, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Manhattan, which is `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r manhattan_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Manhattan", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Manhattan")
@@ -261,7 +259,7 @@ queens_hisp <- percent_hispanic
 queens_oth <- other_victims
 ```
 
-There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Queens, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Queens, which is `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r queens_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Queens", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Queens")
@@ -310,7 +308,7 @@ staten_hisp <- percent_hispanic
 staten_oth <- other_victims
 ```
 
-There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Staten Island, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Staten Island, which is `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r staten_island_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Staten Island", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Staten Island")
@@ -347,7 +345,7 @@ barplot(race_data, main="Shootings by Race", xlab="Race", ylab="Percentage of Sh
 
 ```
 
-As you can see from the pie chart above, the number of shooting incidents vary significantly from borough to borough. One interesting correlation that emerges is that boroughs with fewer shooting incidents seem to have a higher proportion of white victims. Or, alternatively, boroughs with higher numbers of shooting incidents also have higher proportions of shooting victims who are members of minority racial communities. Thus, when shooting incidents go up, it is predominantly minority communities who are most harmed.
+As you can see from the pie chart above, the number of shooting incidents vary significantly from borough to borough. One interesting correlation that emerges is that boroughs with fewer shooting incidents seem to have a higher proportion of white victims. Or, alternatively, boroughs with higher numbers of shooting incidents have higher proportions of shooting victims who are members of racial minorities. Thus, when shooting incidents go up, it is predominantly minority communities who are most harmed.
   
 ```{r correlation_graph, echo=FALSE}
 white <- c(Bronx=bronx_white, Brooklyn=brook_white, Manhattan=man_white, Queens=queens_white, Staten_Island=staten_white)
@@ -358,14 +356,13 @@ plot(shoots, white)
 abline(lm(white ~ shoots))
 ```
 
-This graph plots each borough by number of shooting incidents and proportion of shooting victims who were identified as White with a line of best fit showing a negative correlation. As this plot suggests, there is a real relationship here. However, with this few data points, no strong conclusion can be established any real certainty.
+This graph plots each borough by number of shooting incidents and proportion of shooting victims who were identified as White with a line of best fit showing a negative correlation. As this plot suggests, there is a real relationship here. However, with this few data points, no strong conclusion can be established with any real certainty.
 
-##### Biases, Confounders, and Suggestions for Further Research 
-Most clearly, a larger sample size is necessary to determine if the relationship between number of shootings and racial make up of shooting victims holds at a larger scale. Data from other cities would be extremely useful here.
+#### **Biases, Confounders, and Suggestions for Further Research** 
+Clearly, a larger sample size is necessary to determine if the relationship between number of shootings and racial make up of shooting victims holds at a larger scale. Data from other cities would be extremely useful here.
   
-Further research is also necessary to determine what effects if any, may be confounding this data. Of particular concern would be the gender and racial make up of the general population of each borough. While it currently appear to be the case that boroughs with fewer incidents have a greater proportion of White victims, it may only be the case that those boroughs have a higher proportion of White people in the general population. It may also be that those boroughs have smaller populations over all, suggesting the possibility that it is Whiter populations or smaller populations, respectively, which are causing the higher proportion of White victims.
+Further research is also necessary to determine what effects if any, may be confounding this data. Of particular concern would be the racial make up of the general population of each borough. While it currently appears to be the case that boroughs with fewer incidents have a greater proportion of White victims, it may only be the case that those boroughs have a higher proportion of White people in the general population. It may also be that boroughs with fewer shooting incidents have smaller populations which would suggest that it is smaller populations which are correlated with the higher proportion of White victims, not the smaller number of shooting incidents, per se.
 
-It is also worth researching the particular causes for the extremely high proportion of shooting victims who are identified as Black or Hispanic. These proportions seem to far exceed the expected proportion given their proportions in the general population.
 
 
 
