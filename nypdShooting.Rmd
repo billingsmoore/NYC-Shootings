@@ -1,5 +1,5 @@
 ---
-title: "How do shooting incident breakdowns by race and gender in NYC's boroughs compare to the city overall?"
+title: "When Shootings Go Up, It Is People of Color Who Bear The Brunt"
 author: Jacob Moore
 output:
   html_document: default
@@ -10,10 +10,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Data Source
-[Webpage](https://catalog.data.gov/dataset/nypd-shooting-incident-data-historic/resource/c564b578-fd8a-4005-8365-34150d306cc4)
-
-[CSV](https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD)
+#### **Data Source**
+[Webpage](https://catalog.data.gov/dataset/nypd-shooting-incident-data-historic/resource/c564b578-fd8a-4005-8365-34150d306cc4),    [CSV](https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD)
 
 ```{r define_shooting_data, echo=FALSE}
 shooting_data <- read.csv("https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD")
@@ -22,31 +20,20 @@ num_shootings_all <- nrow(shooting_data)
 
 ```{r clean_data, echo=FALSE}
 
-date_strings <- shooting_data$OCCUR_DATE
-
-start_date <- min(date_strings)
-end_date <- max(date_strings)
-
 clean_data <- subset(shooting_data, select = -c(INCIDENT_KEY, OCCUR_DATE, OCCUR_TIME, PERP_AGE_GROUP, JURISDICTION_CODE, LOCATION_DESC, PRECINCT, STATISTICAL_MURDER_FLAG, X_COORD_CD, Y_COORD_CD, Latitude, Longitude, Lon_Lat))
 
 
 ```
 
-### Introduction
-  The objective of this study is to determine how race and gender breakdowns of New York Police Department shooting incident data compares between the five boroughs of New York City: the Bronx, Brooklyn, Manhattan, Queens, and Staten Island. In addition, this study will compare the boroughs to numbers from the city overall.
-  This study will first breakdown the city's overall numbers, followed by a summary and brief analysis of each borough. Finally, this study will examine comparison of the data and examine the data's implication that increases in the number of shooting incidents coincide with a decrease in the proportion of shooting victims who are identified as White and therefore a higher proportion of shooting victims who are members of minority communities. 
+### **Introduction**
+The objective of this study is to demonstrate the relationship between the number of shooting incidents in New York City and the proportion of shooting victims in those incidents who are members of racial minorities. This study will first determine how racial breakdowns of New York Police Department shooting incident data compares between the five boroughs of New York City: the Bronx, Brooklyn, Manhattan, Queens, and Staten Island.
 
-### NYC Overall Data Summary
+Finally, this study will examine the data's implication that increases in the number of shooting incidents coincide with a decrease in the proportion of shooting victims who are identified as White and therefore a higher proportion of shooting victims who are members of minority communities. 
+
+### **NYC Overall Data Summary**
 
 ```{r data_summary, echo=FALSE}
 num_shootings <- nrow(clean_data)
-
-female_victims <- subset(clean_data, VIC_SEX=='F')
-male_victims <- subset(clean_data, VIC_SEX=='M')
-num_female_victims <- nrow(female_victims)
-num_male_victims <- nrow(male_victims)
-percent_female <- round((num_female_victims / num_shootings) * 100, digits=2)
-percent_male <- round((num_male_victims / num_shootings) * 100, digits=2)
 
 white_victims <- subset(clean_data, VIC_RACE=='WHITE')
 num_white_victims <- nrow(white_victims)
@@ -66,20 +53,10 @@ percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 ```
 
 
-  This data set provides a record of shooting incidents occurring in New York City between `r start_date` and `r end_date`.
+This data set provides a record of shooting incidents occurring in New York City between 2006 and 2020.
 There were `r num_shootings_all` shooting incidents recorded by the NYPD in this data set in the city overall.
 
-#### Analysis
-
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r overall_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r overall_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
@@ -87,16 +64,12 @@ labels <- c("Black", "Hispanic", "White", "Other")
 barplot(races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims")
 ```
 
-##### Initial Analysis of Overall Data
 
-  Victims of shootings were thus, overwhelmingly male and Black, with Hispanics being the next largest percentage of victims. Very, very few shooting victims appear to be White or female.
-
-
-### Boroughs Data Summaries and Analysis
+### **Boroughs Data Summaries**
 
 
 
-#### Bronx Data Summary
+#### **Bronx Data Summary**
 
 ```{r bronx, echo=FALSE}
 my_boro <- 'BRONX'
@@ -106,13 +79,6 @@ num_shootings <- nrow(local_data)
 
 
 percent_of_shootings <- round((num_shootings / num_shootings_all) * 100, digits=2)
-
-female_victims <- subset(local_data, VIC_SEX=='F')
-male_victims <- subset(local_data, VIC_SEX=='M')
-num_female_victims <- nrow(female_victims)
-num_male_victims <- nrow(male_victims)
-percent_female <- round((num_female_victims / num_shootings) * 100, digits=2)
-percent_male <- round((num_male_victims / num_shootings) * 100, digits=2)
 
 white_victims <- subset(local_data, VIC_RACE=='WHITE')
 num_white_victims <- nrow(white_victims)
@@ -134,42 +100,28 @@ num_other_victims <- nrow(other_victims)
 percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 bronx_shootings <- num_shootings
-bronx_fem <- percent_female
-bronx_mal <- percent_male
 bronx_white <- percent_white
 bronx_black<-percent_black
 bronx_hisp <- percent_hispanic
 bronx_oth <- other_victims
 ```
 
-  There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Bronx, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Bronx, `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r bronx_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in the Bronx", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in the Bronx")
 ```
 
-
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r bronx_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r bronx_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
 labels <- c("Black", "Hispanic", "White", "Other")
-barplot(races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims")
+barplot(races, names.arg=labels, main="Shootings by Race in the Bronx", xlab="Race", ylab="Percentage of Shooting Victims")
 ```
 
-##### Analysis
 
-  The Bronx is second only to Brooklyn in number of shootings. The numbers here do not diverge significantly from the numbers for the city overall in terms of gender or racial make up of shooting victims. Men and Black people still make up the vast majority of victims, though a larger share of victims here are Hispanic and Black victims make up a smaller proportion here than in any other borough.
-
-#### Brooklyn Data Summary
+#### **Brooklyn Data Summary**
 
 ```{r brooklyn, echo=FALSE}
 my_boro <- 'BROOKLYN'
@@ -180,13 +132,6 @@ num_shootings <- nrow(local_data)
 brooklyn_shootings <- num_shootings
 
 percent_of_shootings <- round((num_shootings / num_shootings_all) * 100, digits=2)
-
-female_victims <- subset(local_data, VIC_SEX=='F')
-male_victims <- subset(local_data, VIC_SEX=='M')
-num_female_victims <- nrow(female_victims)
-num_male_victims <- nrow(male_victims)
-percent_female <- round((num_female_victims / num_shootings) * 100, digits=2)
-percent_male <- round((num_male_victims / num_shootings) * 100, digits=2)
 
 white_victims <- subset(local_data, VIC_RACE=='WHITE')
 num_white_victims <- nrow(white_victims)
@@ -205,41 +150,27 @@ num_other_victims <- nrow(other_victims)
 percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 brook_shootings <- num_shootings
-brook_fem <- percent_female
-brook_mal <- percent_male
 brook_white <- percent_white
 brook_black<-percent_black
 brook_hisp <- percent_hispanic
 brook_oth <- other_victims
 ```
 
-  There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Brooklyn, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Brooklyn, `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r brooklyn_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Brooklyn", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Brooklyn")
 ```
 
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r brooklyn_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r brooklyn_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
 labels <- c("Black", "Hispanic", "White", "Other")
-barplot(races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims")
+barplot(races, names.arg=labels, main="Shootings by Race in Brooklyn", xlab="Race", ylab="Percentage of Shooting Victims")
 ```
 
-##### Analysis
-
-  The plurality of shooting incidents in this data set occurred in Brooklyn, potentially making it the most dangerous borough. The gender and racial make up of shooting victims does not vary by a large margin from the city over all. Black victims are higher here, and Hispanic victims somewhat lower, but White victims and Female victims are still a very small percentage.
-
-#### Manhattan Data Summary
+#### **Manhattan Data Summary**
 
 ```{r manhattan, echo=FALSE}
 my_boro <- 'MANHATTAN'
@@ -250,13 +181,6 @@ num_shootings <- nrow(local_data)
 manhattan_shootings <- num_shootings
 
 percent_of_shootings <- round((num_shootings / num_shootings_all) * 100, digits=2)
-
-female_victims <- subset(local_data, VIC_SEX=='F')
-male_victims <- subset(local_data, VIC_SEX=='M')
-num_female_victims <- nrow(female_victims)
-num_male_victims <- nrow(male_victims)
-percent_female <- round((num_female_victims / num_shootings) * 100, digits=2)
-percent_male <- round((num_male_victims / num_shootings) * 100, digits=2)
 
 white_victims <- subset(local_data, VIC_RACE=='WHITE')
 num_white_victims <- nrow(white_victims)
@@ -275,40 +199,27 @@ num_other_victims <- nrow(other_victims)
 percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 man_shootings <- num_shootings
-man_fem <- percent_female
-man_mal <- percent_male
 man_white <- percent_white
 man_black<-percent_black
 man_hisp <- percent_hispanic
 man_oth <- other_victims
 ```
 
-  There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Manhattan, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in Manhattan, `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r manhattan_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Manhattan", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Manhattan")
 ```
 
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r manhattan_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r manhattan_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
 labels <- c("Black", "Hispanic", "White", "Other")
-barplot(races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims")
+barplot(races, names.arg=labels, main="Shootings by Race in Manhattan", xlab="Race", ylab="Percentage of Shooting Victims")
 ```
 
-##### Analysis
-  Here, again, numbers do not vary much from city-wide proportions. Manhattan is perhaps the closest to the overall numbers for New York City.
-
-#### Queens Data Summary
+#### **Queens Data Summary**
 
 ```{r queens, echo=FALSE}
 my_boro <- 'QUEENS'
@@ -344,40 +255,27 @@ num_other_victims <- nrow(other_victims)
 percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 queens_shootings <- num_shootings
-queens_fem <- percent_female
-queens_mal <- percent_male
 queens_white <- percent_white
 queens_black<-percent_black
 queens_hisp <- percent_hispanic
 queens_oth <- other_victims
 ```
 
-  There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Queens, `r percent_of_shootings`% of the total shooting incidents in New York City.
+There were `r num_shootings` shooting incidents recorded by the NYPD in this data set in the Queens, `r percent_of_shootings`% of the total shooting incidents in New York City.
 
 ```{r queens_shootings_graph, echo=FALSE}
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Queens", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Queens")
 ```
 
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r queens_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r queens_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
 labels <- c("Black", "Hispanic", "White", "Other")
-barplot(height=races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims", beside=TRUE, legend="")
+barplot(height=races, names.arg=labels, main="Shootings by Race in Queens", xlab="Race", ylab="Percentage of Shooting Victims", beside=TRUE)
 ```
 
-##### Analysis
-  Continuing our pattern of robust similarity, the proportions in Queens do not deviate remarkably from those of the city overall. However, one statistic that does stand out is the number of shooting victims in our Other Races category. At 3.96% Queens has more than double the number of shooting victims in this category than New York City over all.
-
-#### Staten Island Data Summary
+#### **Staten Island Data Summary**
 
 ```{r staten_island, echo=FALSE}
 my_boro <- 'STATEN ISLAND'
@@ -388,13 +286,6 @@ num_shootings <- nrow(local_data)
 staten_island_shootings <- num_shootings
 
 percent_of_shootings <- round((num_shootings / num_shootings_all) * 100, digits=2)
-
-female_victims <- subset(local_data, VIC_SEX=='F')
-male_victims <- subset(local_data, VIC_SEX=='M')
-num_female_victims <- nrow(female_victims)
-num_male_victims <- nrow(male_victims)
-percent_female <- round((num_female_victims / num_shootings) * 100, digits=2)
-percent_male <- round((num_male_victims / num_shootings) * 100, digits=2)
 
 white_victims <- subset(local_data, VIC_RACE=='WHITE')
 num_white_victims <- nrow(white_victims)
@@ -413,8 +304,6 @@ num_other_victims <- nrow(other_victims)
 percent_other <- round((num_other_victims / num_shootings) * 100, digits=2)
 
 staten_shootings <- num_shootings
-staten_fem <- percent_female
-staten_mal <- percent_male
 staten_white <- percent_white
 staten_black<-percent_black
 staten_hisp <- percent_hispanic
@@ -427,26 +316,15 @@ There were `r num_shootings` shooting incidents recorded by the NYPD in this dat
 pie(c(num_shootings, num_shootings_all-num_shootings), c("Shootings in Staten Island", "Shootings Elsewhere in NYC"), main="Proportion of Shootings in NYC that occured in Staten Island")
 ```
 
-  The victims of these shootings were `r percent_female`% female, and `r percent_male`% male.
-
-```{r staten_island_gender_graph, echo=FALSE}
-vics <- c(num_female_victims, num_male_victims)
-gender_labels <- c("Female Victims", "Male Victims")
-pie(vics, gender_labels, main="Proportion of Victims by Gender")
-```
-
-  `r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with only `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
+`r percent_black`% of victims were Black and `r percent_hispanic`% were Hispanic, with `r percent_white`% being White and non-Hispanic. `r percent_other`% of shooting victims belonged to other races or were listed as being of unknown race. Note that percentages sum to more than 100 because some victims are listed as both Black and Hispanic or White and Hispanic.
 
 ```{r staten_island_race_graph, echo=FALSE}
 races <- c(percent_black, percent_hispanic, percent_white, percent_other)
 labels <- c("Black", "Hispanic", "White", "Other")
-barplot(races, names.arg=labels, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims")
+barplot(races, names.arg=labels, main="Shootings by Race in Staten Island", xlab="Race", ylab="Percentage of Shooting Victims")
 ```
 
-##### Analysis
-  Staten Island had the fewest shooting incidents recorded in this sample. A couple of numbers jump out here. First, the proportion of White victims is much higher here than elsewhere in the city. Almost 4 times higher than the city-wide average. The number of female victims is also higher here by a couple percentage points. But still, Black victims are the majority by a huge margin. Victims are also still overwhelmingly male.
-
-### Conclusions
+### **Analysis**
 
 ```{r conc_shootings_pie, echo=FALSE}
 props <- c(bronx_shootings, brooklyn_shootings, manhattan_shootings, queens_shootings, staten_island_shootings)
@@ -455,8 +333,6 @@ pie(props, labels, main="Shootings in NYC by Borough")
 ```
 
 ```{r conc_shootings_bar, echo=FALSE}
-fem <- c(Bronx=bronx_fem, Brooklyn=brook_fem, Manhattan=man_fem, Queens=queens_fem, Staten_Island=staten_fem)
-mal <- c(Bronx=bronx_mal, Brooklyn=brook_mal, Manhattan=man_mal, Queens=queens_mal, Staten_Island=staten_mal)
 
 white <- c(Bronx=bronx_white, Brooklyn=brook_white, Manhattan=man_white, Queens=queens_white, Staten_Island=staten_white)
 black <- c(Bronx=bronx_black, Brooklyn=brook_black, Manhattan=man_black, Queens=queens_black, Staten_Island=staten_black)
@@ -464,22 +340,14 @@ hisp <- c(Bronx=bronx_hisp, Brooklyn=brook_hisp, Manhattan=man_hisp, Queens=quee
 oth <- c(Bronx=bronx_oth, Brooklyn=brook_oth, Manhattan=man_oth, Queens=queens_oth, Staten_Island=staten_oth)
 
 race_legend_labels <- c("Black", "Hispanic", "White")
-gender_legend_labels <- c("Male", "Female")
 
-gender_data <- rbind(mal, fem)
 race_data <- rbind(black, hisp, white)
-
-barplot(gender_data, main="Shootings by Gender", xlab="Gender", ylab="Percentage of Shooting Victims", beside=TRUE, legend=gender_legend_labels) 
 
 barplot(race_data, main="Shootings by Race", xlab="Race", ylab="Percentage of Shooting Victims",beside=TRUE, legend=race_legend_labels)
 
-
 ```
 
-
-  As you can see from the pie chart above, the number shooting incident numbers vary significantly from borough to borough. There was, to me at least, a remarkable level of similarity in racial and gender make up of victims though. Nowhere in New York City are Black victims less than 70% of shooting victims and males make up around 90% of shooting victims everywhere in the city. Gender proportions in particular are remarkably stable regardless of borough. 
-
-  One interesting correlation that emerges is that boroughs with fewer shooting incidents seem to have a higher proportion of white victims. Or, alternatively, boroughs with higher numbers of shooting incidents also have higher proportions of shooting victims who are members of minority racial communities. Thus, when shooting incidents go up, it is predominantly minority communities who are most harmed.
+As you can see from the pie chart above, the number of shooting incidents vary significantly from borough to borough. One interesting correlation that emerges is that boroughs with fewer shooting incidents seem to have a higher proportion of white victims. Or, alternatively, boroughs with higher numbers of shooting incidents also have higher proportions of shooting victims who are members of minority racial communities. Thus, when shooting incidents go up, it is predominantly minority communities who are most harmed.
   
 ```{r correlation_graph, echo=FALSE}
 white <- c(Bronx=bronx_white, Brooklyn=brook_white, Manhattan=man_white, Queens=queens_white, Staten_Island=staten_white)
@@ -490,20 +358,18 @@ plot(shoots, white)
 abline(lm(white ~ shoots))
 ```
 
-  As this plot suggests, there is a real correlation here. However, with this few data points, no strong relationship can be established any real certainty.
+This graph plots each borough by number of shooting incidents and proportion of shooting victims who were identified as White with a line of best fit showing a negative correlation. As this plot suggests, there is a real relationship here. However, with this few data points, no strong conclusion can be established any real certainty.
 
 ##### Biases, Confounders, and Suggestions for Further Research 
-  Most clearly, a larger sample size is necessary to determine if the relationship between number of shootings and racial make up of shooting victims holds at a larger scale.
+Most clearly, a larger sample size is necessary to determine if the relationship between number of shootings and racial make up of shooting victims holds at a larger scale. Data from other cities would be extremely useful here.
   
-  Further research is also necessary to determine what effects if any, may be confounding this data. Of particular concern would be the gender and racial make up of the general population of each borough. While it currently appear to be the case that boroughs with fewer incidents have a greater proportion of White victims, it may only be the case that those boroughs have a higher proportion of White people in the general population. It may also be that those boroughs have smaller populations over all, suggesting the possibility that it is Whiter populations or smaller populations, respectively, which are causing the higher proportion of White victims.
+Further research is also necessary to determine what effects if any, may be confounding this data. Of particular concern would be the gender and racial make up of the general population of each borough. While it currently appear to be the case that boroughs with fewer incidents have a greater proportion of White victims, it may only be the case that those boroughs have a higher proportion of White people in the general population. It may also be that those boroughs have smaller populations over all, suggesting the possibility that it is Whiter populations or smaller populations, respectively, which are causing the higher proportion of White victims.
 
-  It is also worth researching the particular causes for the extremely high proportion of shooting victims who are identified as Black or Hispanic. These proportions seem to far exceed the expected proportion given their proportions in the general population.
-
-  Additionally, I am certain that I, as a human, have a number of biases of which I am unaware and my conclusion should thus be taken with a grain of salt.
-  
+It is also worth researching the particular causes for the extremely high proportion of shooting victims who are identified as Black or Hispanic. These proportions seem to far exceed the expected proportion given their proportions in the general population.
 
 
-### Session Info
+
+### **Session Info**
 ```{r session_info, echo=FALSE}
 sessionInfo()
 ```
