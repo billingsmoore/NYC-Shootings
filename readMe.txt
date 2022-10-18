@@ -1,4 +1,3 @@
-I did a (very bad) data science! 
-Was it very hard? Yes! 
-Did I bungle the git stuff? Sure did!
-But I learned a lot!
+The objective of this study is to demonstrate the relationship between the number of shooting incidents in New York City and the proportion of shooting victims involved in those incidents who are members of racial minorities. This study will first determine how racial breakdowns of New York Police Department shooting incident data compare between the five boroughs of New York City: the Bronx, Brooklyn, Manhattan, Queens, and Staten Island. Second, this study will examine the data’s implication that increases in the number of shooting incidents coincide with a decrease in the proportion of shooting victims identified as White. Therefore, a higher proportion of shooting victims are people of color. This study then shows that this relationship continues to hold when the data is sorted by precinct, rather than borough.
+
+Final version is nycShootings.Rmd
